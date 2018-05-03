@@ -23,7 +23,7 @@ def formatScanDetails(data, file):
         print ('def_time: ' + scan_detail['def_time'])
 
 
-import commands
+import subprocess as commands
 import hashlib
 import sys
 import json
@@ -45,14 +45,12 @@ with open(sys.argv[2], 'r') as f:
         data = f.read()
         if not data:
             break
-        md5.update(data)
+        md5.update(data.encode('utf-8'))
 
 md5 = md5.hexdigest().upper() #convert hash to hexidecimal and upper case the letters
-
 # format the curl command to look up against metadefender.opswat.com
 curlLookup = "curl -X GET https://api.metadefender.com/v2/hash/" + md5 + " -H 'apikey: " + apikey + "'"
 s = commands.getstatusoutput(curlLookup) # call in terminal
-
 # grab relevant data from output from terminal call
 temp = extractRelevantData(s)
 j = json.loads(temp) # format json data to be usable
@@ -64,7 +62,6 @@ if j.get(md5, "") != "":
     post = commands.getstatusoutput(curlPost) # call curl in terminal and grab the output
     tempPost = extractRelevantData(post)
     postJson = json.loads(tempPost) # format json data to be usable
-
     getJson = "" # variable to store json when retreiving results
     finished = False # flag to stop pulling when data is retreived
     while finished == False:
