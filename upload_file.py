@@ -60,7 +60,7 @@ j = json.loads(temp) # format json data to be usable
 if j.get(md5, "") != "":
     # result was not found
     # upload file
-    curlPost = "curl -X POST --data-binary " + "'@" + sys.argv[1] + "'" + " https://api.metadefender.com/v2/file -H 'apikey: " + apikey + "'"
+    curlPost = "curl -X POST --data-binary " + "'@" + sys.argv[2] + "'" + " https://api.metadefender.com/v2/file -H 'apikey: " + apikey + "'"
     post = commands.getstatusoutput(curlPost) # call curl in terminal and grab the output
     tempPost = extractRelevantData(post)
     postJson = json.loads(tempPost) # format json data to be usable
@@ -73,6 +73,7 @@ if j.get(md5, "") != "":
         sget = commands.getstatusoutput(curlGet) # grab output from curl call
         tempGet = extractRelevantData(sget)
         getJson = json.loads(tempGet) # format json data to be usable
+
         if getJson.get('file_id', "") != "": # sets finished flag to True when data is retreived
             finished = True
 
