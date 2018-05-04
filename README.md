@@ -1,4 +1,4 @@
-1. Open the terminal
+1. Open the terminal and execute the commands #2 and #3
 2. sudo apt-get update
 3. sudo apt install curl
 4. When prompted from the command from 3 type "Y" without the quotes
