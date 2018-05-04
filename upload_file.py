@@ -34,7 +34,7 @@ md5 = hashlib.md5() # used to calculate md5 hash
 # check if a file was passed in as argument
 # program terminates if no file was passed
 if len(sys.argv) <= 2:
-    print ("Please pass in an apikey and a file ex: \n     python test.py apikey1234567890 someFile.txt")
+    print ("Please pass in an apikey and a file ex: \n     python3 upload_file.py apikey1234567890 someFile.txt")
     sys.exit()
 
 apikey = sys.argv[1] # apiKey from argument passed in
