@@ -4,7 +4,7 @@
 #
 # helper function to extract the relevant data from the command line curl call
 def extractRelevantData(data):
-    splitArr = data[1].split("\n")
+    splitArr = data.split("\n")
     return splitArr[len(splitArr) - 1]
 
 # helper function to print scan details in the correct format
@@ -49,8 +49,8 @@ with open(sys.argv[2], 'r') as f:
 
 md5 = md5.hexdigest().upper() #convert hash to hexidecimal and upper case the letters
 # format the curl command to look up against metadefender.opswat.com
-curlLookup = "curl -X GET https://api.metadefender.com/v2/hash/" + md5 + " -H 'apikey: " + apikey + "'"
-s = commands.getstatusoutput(curlLookup) # call in terminal
+curlLookup = "curl -sX GET https://api.metadefender.com/v2/hash/" + md5 + " -H 'apikey: " + apikey + "'"
+s = commands.check_output(curlLookup, shell=True, universal_newlines=True) # call in terminal
 # grab relevant data from output from terminal call
 temp = extractRelevantData(s)
 j = json.loads(temp) # format json data to be usable
@@ -58,16 +58,16 @@ j = json.loads(temp) # format json data to be usable
 if j.get(md5, "") != "":
     # result was not found
     # upload file
-    curlPost = "curl -X POST --data-binary " + "'@" + sys.argv[2] + "'" + " https://api.metadefender.com/v2/file -H 'apikey: " + apikey + "'"
-    post = commands.getstatusoutput(curlPost) # call curl in terminal and grab the output
+    curlPost = "curl -sX POST --data-binary " + "'@" + sys.argv[2] + "'" + " https://api.metadefender.com/v2/file -H 'apikey: " + apikey + "'"
+    post = commands.check_output(curlPost, shell=True, universal_newlines=True) # call in terminal
     tempPost = extractRelevantData(post)
     postJson = json.loads(tempPost) # format json data to be usable
     getJson = "" # variable to store json when retreiving results
     finished = False # flag to stop pulling when data is retreived
     while finished == False:
         # format curl call to retreive results via data_id
-        curlGet = "curl -X GET https://api.metadefender.com/v2/file/" + postJson['data_id'] + " -H 'apikey: " + apikey + "'"
-        sget = commands.getstatusoutput(curlGet) # grab output from curl call
+        curlGet = "curl -sX GET https://api.metadefender.com/v2/file/" + postJson['data_id'] + " -H 'apikey: " + apikey + "'"
+        sget = commands.check_output(curlGet, shell=True, universal_newlines=True) # call in terminal
         tempGet = extractRelevantData(sget)
         getJson = json.loads(tempGet) # format json data to be usable
 
